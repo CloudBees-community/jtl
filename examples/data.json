@@ -1,0 +1,35 @@
+{
+  "users": [
+    {
+      "name": "Bruce Tate",
+      "email": "bruce@tate.com"
+    },
+    {
+      "name": "Michael Steele",
+      "email": "mike@steele.com"
+    }
+  ],
+
+  "mysql": [
+    {
+      "name": "joe",
+      "host": "localhost",
+      "user": "joe",
+      "password": "mypasswordispassword"
+    },
+    {
+      "name": "bob",
+      "host": "localhost",
+      "user": "bob",
+      "password": "mypasswordispassword"
+    }
+  ],
+
+  "misc": {
+    "int": 6,
+    "float": 6.66,
+    "string": "hello",
+    "list": [7, 8, 9],
+    "map": {"foo": "FOO", "bar": "BAR"}
+  }
+}

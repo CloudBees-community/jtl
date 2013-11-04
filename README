@@ -1,0 +1,58 @@
+#-*-org-*-
+
+jtl (JSON transform language) is a simple utility for transforming Django
+templates to other files using JSON data.
+
+* Example
+
+Template "users.xml":
+
+#+begin_src xml
+<users>
+  {% for user in users %}
+  <user>
+    <name>{{user.name}}</name>
+    <email>{{user.email}}</email>
+  </user>
+  {% endfor %}
+</users>
+#+end_src
+
+Data "users.json":
+
+#+begin_src javascript
+{
+  "users": [
+    {
+      "name": "Bruce Tate",
+      "email": "bruce@tate.com"
+    },
+    {
+      "name": "Michael Steele",
+      "email": "mike@steele.com"
+    }
+  ]
+}
+#+end_src
+
+Command line:
+
+$ jtl users.xml users.json
+
+Rendered output:
+
+#+begin_src xml
+<users>
+
+  <user>
+    <name>Bruce Tate</name>
+    <email>bruce@tate.com</email>
+  </user>
+
+  <user>
+    <name>Michael Steele</name>
+    <email>mike@steele.com</email>
+  </user>
+
+</users>
+#+end_src

@@ -1,0 +1,11 @@
+[
+{% for m in mysql %}
+    {
+		"name" : "{{m.name}}",
+		"host" : "{{m.host}}",
+		"metrics" : "status,newrelic",
+		"user" : "{{m.user}}",
+		"passwd" : "{{m.password}}"
+    },
+{% endfor %}
+]

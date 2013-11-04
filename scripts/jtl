@@ -1,0 +1,36 @@
+#!/usr/bin/env escript
+%%-*-erlang-*-
+
+main(Args) ->
+    configure_code_path(all_ebins()),
+    handle_exit(jtl_cli:exec(Args)).
+
+handle_exit(ok) -> halt(0);
+handle_exit(error) -> halt(1);
+handle_exit({error, Msg}) ->
+    io:format(standard_error, "~s~n", [Msg]),
+    halt(1).
+
+all_ebins() ->
+    all_ebins(app_root()).
+
+app_root() ->
+    ScriptDir = filename:dirname(escript:script_name()),
+    filename:absname(filename:join(ScriptDir, "..")).
+
+all_ebins(AppRoot) ->
+    [ebin_dir(AppRoot)|deps_ebins(AppRoot)].
+
+ebin_dir(Dir) ->
+    filename:join(Dir, "ebin").
+
+deps_ebins(Root) ->
+    [ebin_dir(DepDir) || DepDir <- deps_dirs(Root)].
+
+deps_dirs(Root) ->
+    DepsDir = filename:join(Root, "deps"),
+    [filename:absname(Dir) || Dir <- filelib:wildcard(DepsDir ++ "/*")].
+
+configure_code_path(Ebins) ->
+    lists:foreach(fun code:add_path/1, Ebins).
+

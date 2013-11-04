@@ -1,0 +1,8 @@
+%%% -*-erlang-*-
+{application, jtl,
+ [{description, "JSON transformation utility"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [kernel, stdlib]},
+  {env, []}
+ ]}.
