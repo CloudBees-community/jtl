@@ -36,13 +36,16 @@ render_read_file({error, Err}, _Vars, Name) ->
 
 erlydtl_render(TemplateBin, Vars, TemplateName) ->
     M = template_module(TemplateBin),
-    erlydtl:compile(TemplateBin, M),
+    verify_compile(erlydtl:compile(TemplateBin, M)),
     handle_render(M:render(Vars), TemplateName).
-
-handle_render({ok, Rendered}, _Template) -> Rendered;
-handle_render({error, Err}, Template) ->
-    error({dtl_render, Template, Err}).
 
 template_module(Bin) ->
     HashIndex = erlang:phash2(Bin, ?MAX_TEMPLATE_MODULES),
     list_to_atom("jtl_template_" ++ integer_to_list(HashIndex)).
+
+verify_compile({ok, _}) -> ok;
+verify_compile({error, Err}) -> error(Err).
+
+handle_render({ok, Rendered}, _Template) -> Rendered;
+handle_render({error, Err}, Template) ->
+    error({dtl_render, Template, Err}).

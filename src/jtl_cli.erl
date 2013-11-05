@@ -70,16 +70,22 @@ write_file_error_msg(Err, File) ->
 
 handle_error({error, Err}, Args) ->
     handle_error(Err, Args);
-handle_error({LineNum, invalid_json}, #exec{data_json=File}) ->
-    {error, invalid_json_error_msg(LineNum, File)};
+handle_error({Pos, invalid_json}, #exec{data_json=File}) ->
+    {error, invalid_json_error_msg(Pos, File)};
+handle_error({Pos, erlydtl_parser, Msg}, #exec{template=File}) ->
+    {error, template_compile_error_msg(Pos, Msg, File)};
 handle_error(Err, _Args) ->
     {error, general_error_msg(Err)}.
 
-invalid_json_error_msg(LineNum, File) ->
-    io_lib:format("Invalid JSON in ~s at char pos ~p", [File, LineNum]).
+invalid_json_error_msg(Pos, File) ->
+    io_lib:format("Invalid JSON in ~s at char pos ~p", [File, Pos]).
+
+template_compile_error_msg(Pos, Msg, File) ->
+    io_lib:format("Template error in ~s at char pos ~p: ~s", [File, Pos, Msg]).
 
 general_error_msg(Err) ->
-    io_lib:format("~p", [Err]).
+    Trace = erlang:get_stacktrace(),
+    io_lib:format("Unhandled error: ~p~n~p", [Err, Trace]).
 
 cli_error(Err) -> {error, Err}.
 
