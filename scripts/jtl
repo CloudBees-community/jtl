@@ -15,8 +15,17 @@ all_ebins() ->
     all_ebins(app_root()).
 
 app_root() ->
-    ScriptDir = filename:dirname(escript:script_name()),
+    ScriptDir = filename:dirname(script_name()),
     filename:absname(filename:join(ScriptDir, "..")).
+
+script_name() ->
+    resolve_link(escript:script_name()).
+
+resolve_link(File) ->
+    resolve_read_link(file:read_link(File), File).
+
+resolve_read_link({ok, Target}, _Link) -> Target;
+resolve_read_link({error, einval}, File) -> File.
 
 all_ebins(AppRoot) ->
     [ebin_dir(AppRoot)|deps_ebins(AppRoot)].
